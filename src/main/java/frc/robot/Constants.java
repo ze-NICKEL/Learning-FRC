@@ -4,16 +4,40 @@
 
 package frc.robot;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+
 public final class Constants {
-  public static class OperatorConstants {
+
     public static final int kDriverControllerPort = 0;
-  }
+
+    public static final int kTopIntakeMotorPort = 1;
+
+    public static final int kBottomIntakeMotorPort = 2;
+
+    public enum IntakeObject {
+      TOP,
+      BOTTOM
+    }
+
+    public static final TalonFXConfiguration getConfig(IntakeObject intakeObject) {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+
+            if (intakeObject == IntakeObject.TOP) {
+              config.Slot0.kP = 0.11;
+              config.Slot0.kI = 0.0;
+              config.Slot0.kD = 0.001;
+              config.Slot0.kV = 0.12; 
+            } else if (intakeObject == IntakeObject.BOTTOM) {
+              config.Slot0.kP = 0.11;
+              config.Slot0.kI = 0.0;
+              config.Slot0.kD = 0.001;
+              config.Slot0.kV = 0.12; 
+            }
+      
+            config.CurrentLimits.StatorCurrentLimit = 40.0; //40 amps max
+            config.CurrentLimits.StatorCurrentLimitEnable = true;
+
+            return config;
+    }
 }
