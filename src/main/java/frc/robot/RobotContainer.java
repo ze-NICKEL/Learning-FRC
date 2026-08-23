@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.GeneralConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Transfer;
 
 
@@ -14,6 +15,7 @@ public class RobotContainer {
 //Subsystems are defined here
   private final Intake m_Intake = new Intake();
   private final Transfer m_Transfer = new Transfer();
+  private final Shooter m_Shooter = new Shooter();
 
   //Controller(s)
   private final CommandXboxController m_driverController =
@@ -29,7 +31,13 @@ public class RobotContainer {
   private void configureBindings() {
 
 
-    m_driverController.rightTrigger().onTrue(m_Intake.fullIntake());
+    m_driverController.rightTrigger().whileTrue(m_Intake.fullIntake());
+
+    m_driverController.leftTrigger().whileTrue(m_Transfer.fullTransfer());
+
+    //Goes through shooting logic
+
+    m_driverController.rightBumper().onTrue(m_Shooter.initShoot());
 
     
   }
