@@ -1,34 +1,35 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package frc.robot;
+package frc.robot.Constants;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
-
-public final class Constants {
-
-    public static final int kDriverControllerPort = 0;
+public class IntakeConstants {
 
     public static final int kTopIntakeMotorPort = 1;
 
     public static final int kBottomIntakeMotorPort = 2;
 
     public enum IntakeObject {
-      TOP,
-      BOTTOM
+      TOPINTAKE,
+      BOTTOMINTAKE,
+
+      TRANSFER
     }
 
     public static final TalonFXConfiguration getConfig(IntakeObject intakeObject) {
             TalonFXConfiguration config = new TalonFXConfiguration();
 
-            if (intakeObject == IntakeObject.TOP) {
+            if (intakeObject == IntakeObject.TOPINTAKE) {
               config.Slot0.kP = 0.11;
               config.Slot0.kI = 0.0;
               config.Slot0.kD = 0.001;
               config.Slot0.kV = 0.12; 
-            } else if (intakeObject == IntakeObject.BOTTOM) {
+            } else if (intakeObject == IntakeObject.BOTTOMINTAKE) {
+              config.Slot0.kP = 0.11;
+              config.Slot0.kI = 0.0;
+              config.Slot0.kD = 0.001;
+              config.Slot0.kV = 0.12; 
+            }
+            else if (intakeObject == IntakeObject.TRANSFER) {
               config.Slot0.kP = 0.11;
               config.Slot0.kI = 0.0;
               config.Slot0.kD = 0.001;
@@ -40,4 +41,5 @@ public final class Constants {
 
             return config;
     }
+    
 }

@@ -12,12 +12,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   
-  TalonFX m_topIntakeMotor = new TalonFX(Constants.kTopIntakeMotorPort);
-  TalonFX m_bottomIntakeMotor = new TalonFX(Constants.kBottomIntakeMotorPort);
+  TalonFX m_topIntakeMotor = new TalonFX(IntakeConstants.kTopIntakeMotorPort);
+  TalonFX m_bottomIntakeMotor = new TalonFX(IntakeConstants.kBottomIntakeMotorPort);
   
   NetworkTable m_intakeTable = NetworkTableInstance.getDefault().getTable("Intake");
   
@@ -26,14 +26,15 @@ public class Intake extends SubsystemBase {
 
 
   public Intake() {
-    m_topIntakeMotor.getConfigurator().apply(Constants.getConfig(Constants.IntakeObject.TOP));
-    m_bottomIntakeMotor.getConfigurator().apply(Constants.getConfig(Constants.IntakeObject.BOTTOM));
+    m_topIntakeMotor.getConfigurator().apply(IntakeConstants.getConfig(IntakeConstants.IntakeObject.TOPINTAKE));
+    m_bottomIntakeMotor.getConfigurator().apply(IntakeConstants.getConfig(IntakeConstants.IntakeObject.BOTTOMINTAKE));
 
   }
 
   //This method will be called once per scheduler run
   @Override
   public void periodic() {
+    
     m_speedPub.set(m_topIntakeMotor.get());
     
   }

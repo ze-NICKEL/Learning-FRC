@@ -4,20 +4,20 @@
 
 package frc.robot;
 
-import frc.robot.Constants;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.GeneralConstants;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Transfer;
 
 
 public class RobotContainer {
 //Subsystems are defined here
   private final Intake m_Intake = new Intake();
+  private final Transfer m_Transfer = new Transfer();
 
   //Controller(s)
   private final CommandXboxController m_driverController =
-      new CommandXboxController(Constants.kDriverControllerPort);
+      new CommandXboxController(GeneralConstants.kDriverControllerPort);
 
     //Main robot Container constructor.
     public RobotContainer() {
