@@ -47,7 +47,7 @@ public Command fullIntake() {
     );
 }
 
-public Command forceStopIntake() {
+public Command stopIntake() {
   return Commands.runOnce(() -> {
   
     m_topIntakeMotor.set(0.0);

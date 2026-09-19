@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_Intake.forceStopIntake();
+    m_Intake.stopIntake();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

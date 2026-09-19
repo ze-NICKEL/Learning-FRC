@@ -31,13 +31,15 @@ public class RobotContainer {
   private void configureBindings() {
 
 
-    m_driverController.rightTrigger().whileTrue(m_Intake.fullIntake());
+    m_driverController.rightTrigger().whileTrue(m_Intake.fullIntake().finallyDo(() -> m_Intake.stopIntake()));
 
-    m_driverController.leftTrigger().whileTrue(m_Transfer.fullTransfer());
+    m_driverController.leftTrigger().whileTrue(m_Transfer.fullTransfer().finallyDo(() -> m_Transfer.forceStopTransfer()));
 
     //Goes through shooting logic
 
-    m_driverController.rightBumper().onTrue(m_Shooter.initShoot());
+    m_driverController.rightBumper().whileTrue(m_Shooter.initShoot().finallyDo(() -> m_Shooter.stopShoot()));
+    
+
 
     
   }
