@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.AimSwerve;
 import frc.robot.constants.TransferShootConstants;
 
 public class Shooter extends SubsystemBase {
@@ -18,8 +19,13 @@ public class Shooter extends SubsystemBase {
 
     BooleanPublisher m_ShootRequestPub = m_shooterTable.getBooleanTopic("ShootRequest").publish();
     BooleanPublisher m_CanShootPub = m_shooterTable.getBooleanTopic("CanShoot").publish();
+
     Boolean canShoot = false;
-    Boolean shootRequested = false;
+    Boolean shootRequested = false;  
+    
+    public Shooter() {
+        m_shooterMotor.getConfigurator().apply(TransferShootConstants.getConfig());
+    }
 
     @Override
     public void periodic() {
@@ -29,8 +35,13 @@ public class Shooter extends SubsystemBase {
         if (shootRequested) {
                 //turn logic
 
-                //if robot is facing target, set canShoot to true
+                //TURNING LINE HERE(COMMAND)
+
+                
                 canShoot = true;
+        }
+        else {
+            canShoot = false;
         }
 
         
@@ -47,10 +58,12 @@ public class Shooter extends SubsystemBase {
     public Command stopShoot() {
         return new InstantCommand(() -> {
             shootRequested = false;
-            canShoot = false;
+        
         }, this);
 
     }
+
+
 
 
     
