@@ -71,7 +71,7 @@ public class Shooter extends SubsystemBase {
     }
 
 
-public Command shootSequenceCommand(CommandSwerveDrivetrain m_drivetrain, java.util.function.DoubleSupplier velocityX, java.util.function.DoubleSupplier velocityY) {
+public Command shootSequenceCommand(CommandSwerveDrivetrain m_drivetrain, double velocityX, double velocityY) {
     return Commands.sequence(
         // 1. Initialize
         Commands.runOnce(() -> {
@@ -81,8 +81,8 @@ public Command shootSequenceCommand(CommandSwerveDrivetrain m_drivetrain, java.u
             new ParallelCommandGroup(
             Commands.runOnce(() -> {
                 m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle()
-                    .withVelocityX(velocityX.getAsDouble())
-                    .withVelocityY(velocityY.getAsDouble())
+                    .withVelocityX(velocityX)
+                    .withVelocityY(velocityY)
                     .withTargetDirection(
                         new Rotation2d(
                             //goal
