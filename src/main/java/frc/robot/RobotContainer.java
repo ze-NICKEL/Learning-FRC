@@ -15,11 +15,15 @@ public class RobotContainer {
 //Subsystems are defined here
   private final Intake m_Intake = new Intake();
   private final Transfer m_Transfer = new Transfer();
-  private final Shooter m_Shooter = new Shooter();
+  private final CommandSwerveDrivetrain m_drivetrain = TunerConstants.createDrivetrain();
+  private final ShootMove m_Shooter = new ShootMove(m_drivetrain, new CommandXboxController(GeneralConstants.kDriverControllerPort));
+  
 
   //Controller(s)
   private final CommandXboxController m_driverController =
       new CommandXboxController(GeneralConstants.kDriverControllerPort);
+
+  ShootMove m_shootMove = new ShootMove(m_drivetrain, m_driverController);
 
     //Main robot Container constructor.
     public RobotContainer() {
@@ -30,18 +34,24 @@ public class RobotContainer {
   //Definne button mappings
   private void configureBindings() {
 
+    m_driverController.x().onTrue(m_Shooter.startShootMotors(TransferShootConstants.kShootSpeed));
+
 
     m_driverController.rightTrigger().whileTrue(m_Intake.fullIntake().finallyDo(() -> m_Intake.stopIntake()));
 
     m_driverController.leftTrigger().whileTrue(m_Transfer.fullTransfer().finallyDo(() -> m_Transfer.forceStopTransfer()));
 
-    //Goes through shooting logic
+    m_driverController.rightBumper().whileTrue(
+        m_Shooter.executeCommand( 
+            m_driverController.getRightY(), 
+            m_driverController.getRightX()
+        )
+    );
 
-    m_driverController.rightBumper().whileTrue(m_Shooter.initShoot().finallyDo(() -> m_Shooter.stopShoot()));
-    
-
-
-    
+    m_driverController.y().onTrue(m_shootMove.executeCommand(
+      m_driverController.getLeftY(),
+      m_driverController.getLeftX()
+    ));
   }
 
 
