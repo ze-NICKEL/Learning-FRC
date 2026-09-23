@@ -20,5 +20,9 @@ public class TransferShootConstants {
 
             return config;
     }
+
+    public static final double kShootSpeed = 0.8;
+
+    public static final double kTransferSpeed = 0.5;
     
 }
