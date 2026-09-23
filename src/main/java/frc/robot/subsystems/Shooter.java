@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
     BooleanPublisher m_ShootRequestPub = m_shooterTable.getBooleanTopic("ShootRequest").publish();
     BooleanPublisher m_CanShootPub = m_shooterTable.getBooleanTopic("CanShoot").publish();
     Rotation2d targetRotation;
-    Transfer m_transfer = new Transfer();
+    Transfer m_transfer;
 
     boolean useRegularShoot = false;
 
@@ -34,7 +34,9 @@ public class Shooter extends SubsystemBase {
     Boolean canShoot = false;
     Rotation2d targetAngleRelativeToRobot = new Rotation2d(0);
     
-    public Shooter() {
+    public Shooter(CommandSwerveDrivetrain drivetrain, Transfer transfer) {
+        m_drivetrain = drivetrain;
+        m_transfer = transfer;
         m_shooterMotor.getConfigurator().apply(TransferShootConstants.getConfig());
     }
 
@@ -71,7 +73,7 @@ public class Shooter extends SubsystemBase {
     }
 
 
-public Command shootSequenceCommand(CommandSwerveDrivetrain m_drivetrain, double velocityX, double velocityY) {
+public Command shootSequenceCommand(double velocityX, double velocityY) {
     return Commands.sequence(
         // 1. Initialize
         Commands.runOnce(() -> {

@@ -18,11 +18,12 @@ import frc.robot.subsystems.Transfer;
 
 public class RobotContainer {
 //Subsystems are defined here
+  CommandSwerveDrivetrain m_drivetrain = TunerConstants.createDrivetrain();
+
   private final Intake m_Intake = new Intake();
   private final Transfer m_Transfer = new Transfer();
-  private final Shooter m_Shooter = new Shooter();
+  private final Shooter m_Shooter = new Shooter(m_drivetrain, m_Transfer);
 
-  CommandSwerveDrivetrain m_drivetrain = TunerConstants.createDrivetrain();
 
   //Controller(s)
   private final CommandXboxController m_driverController =
@@ -56,7 +57,6 @@ public class RobotContainer {
 
     m_driverController.rightBumper().whileTrue(
       m_Shooter.shootSequenceCommand(
-        m_drivetrain, 
         m_driverController.getRightY(),
         m_driverController.getRightX()
       ).finallyDo(() -> m_Shooter.stopShootMotors()));
