@@ -78,27 +78,28 @@ public Command shootSequenceCommand(double velocityX, double velocityY) {
         // 1. Initialize
         Commands.runOnce(() -> {
             m_ShootRequestPub.set(true);
-            }, this),
+        }, this),
  
-            new ParallelCommandGroup(
-            Commands.runOnce(() -> {
-                m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle()
-                    .withVelocityX(velocityX)
-                    .withVelocityY(velocityY)
-                    .withTargetDirection(
-                        new Rotation2d(
-                            //goal
-                            targetAngleRelativeToRobot.getRadians() -
-                            m_drivetrain.getState().Pose.getRotation().getRadians()
-                        )
+        // 2. Drive and shooting state in parallel
+        new ParallelCommandGroup(
+            m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle()
+                .withVelocityX(velocityX)
+                .withVelocityY(velocityY)
+                .withTargetDirection(
+                    new Rotation2d(
+                        // goal
+                        targetAngleRelativeToRobot.getRadians() -
+                        m_drivetrain.getState().Pose.getRotation().getRadians()
                     )
-                );
-                this.m_drivetrain = m_drivetrain;
+                )
+            ),
+            Commands.runOnce(() -> {
                 canShoot = true;
-            }, this)
+            }, this).finallyDo((interrupted) -> {
+                canShoot = false;
+            })
         )
-    ).finallyDo((interrupted) -> {
-        canShoot = false;
-    });
-} 
+    );
+}
+
 }

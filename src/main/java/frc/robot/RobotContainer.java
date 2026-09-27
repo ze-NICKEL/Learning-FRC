@@ -15,7 +15,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Transfer;
 
-
 public class RobotContainer {
 //Subsystems are defined here
   CommandSwerveDrivetrain m_drivetrain = TunerConstants.createDrivetrain();
@@ -32,6 +31,7 @@ public class RobotContainer {
 
     //Main robot Container constructor.
     public RobotContainer() {
+
               m_drivetrain.setDefaultCommand(
             m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentric()
                 .withVelocityX(-m_driverController.getLeftY() * 5)
@@ -41,6 +41,10 @@ public class RobotContainer {
         );
     //Key mappings defined
     configureBindings();
+  }
+
+  public CommandSwerveDrivetrain getDrivetrain() {
+    return m_drivetrain;
   }
 
   //Definne button mappings

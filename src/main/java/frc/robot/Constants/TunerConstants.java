@@ -210,22 +210,21 @@ public class TunerConstants {
         AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded).getTagPose(26).get().getY()
     );
 
+//Checks if the alliance is present, and returns correct target position based on alliance color. If no alliance is present, it defaults to blue target position.
+public static final Translation2d getTargetPosition() {
 
-    public static final Translation2d getTargetPosition() {
-
-        if (DriverStation.getAlliance().get() == Alliance.Red) {
-
+    var allianceOpt = DriverStation.getAlliance();
+    
+    if (allianceOpt.isPresent()) {
+        if (allianceOpt.get() == Alliance.Red) {
             return redTargetPosition;
-        } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
+        } else {
             return blueTargetPosition;
-            
         }
-        else {
-            DriverStation.refreshData();
-            return getTargetPosition();
-        }
-
     }
+    
+    return blueTargetPosition; 
+}
 
    
 

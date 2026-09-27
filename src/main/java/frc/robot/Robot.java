@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -15,11 +21,19 @@ import frc.robot.subsystems.Intake;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
+
+
+  private final Field2d m_field = new Field2d();
+
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
 
+  private SwerveDrivePoseEstimator m_DrivePoseEstimator;
+
   Intake m_Intake = new Intake();
+
+  CommandSwerveDrivetrain m_drivetrain;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -29,10 +43,16 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    SmartDashboard.putData("Field", m_field);
+
+    m_drivetrain = m_robotContainer.getDrivetrain();
+
   }
 
   @Override
   public void robotPeriodic() {
+
+    m_field.setRobotPose(m_drivetrain.getState().Pose);
     
     CommandScheduler.getInstance().run();
   }
