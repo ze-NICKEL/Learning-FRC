@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.FuelSim;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.TransferShootConstants;
 import frc.robot.constants.TunerConstants;
@@ -32,13 +33,16 @@ public class RobotContainer {
     //Main robot Container constructor.
     public RobotContainer() {
 
-              m_drivetrain.setDefaultCommand(
-            m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentric()
-                .withVelocityX(-m_driverController.getLeftY() * 5)
-                .withVelocityY(-m_driverController.getLeftX() * 5)
-                .withRotationalRate(-m_driverController.getRightX() * 5)
-            )
-        );
+          m_drivetrain.setDefaultCommand(
+          m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentric()
+              .withVelocityX(-m_driverController.getLeftY() * 0.8)
+              .withVelocityY(-m_driverController.getLeftX() * 0.8)
+              .withRotationalRate(-m_driverController.getRightX() * 0.34)
+          )
+      );
+
+      FuelSim.getInstance().spawnStartingFuel();
+
     //Key mappings defined
     configureBindings();
   }
@@ -65,6 +69,7 @@ public class RobotContainer {
 
     m_driverController.rightBumper().whileTrue(
       m_Shooter.shootSequenceCommand(
+        m_Transfer,
         m_driverController.getRightY(),
         m_driverController.getRightX()
       ).finallyDo(() -> m_Shooter.stopShootMotors()));

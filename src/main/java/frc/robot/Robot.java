@@ -57,9 +57,9 @@ public class Robot extends TimedRobot {
     m_field.setRobotPose(m_drivetrain.getState().Pose);
 
     m_drivetrain.drive(new ChassisSpeeds(
-    -m_driverController.getLeftY() * 5,
-    -m_driverController.getLeftX() * 5,
-     -m_driverController.getRightX() * 5
+    -m_driverController.getLeftY() * 0.3,
+    -m_driverController.getLeftX() * 0.3,
+     -m_driverController.getRightX() * 0.3
       
     ));
 

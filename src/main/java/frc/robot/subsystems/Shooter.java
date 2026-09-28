@@ -73,8 +73,10 @@ public class Shooter extends SubsystemBase {
     }
 
 
-public Command shootSequenceCommand(double velocityX, double velocityY) {
+public Command shootSequenceCommand(Transfer m_transfer, double velocityX, double velocityY) {
     return Commands.sequence(
+
+
         // 1. Initialize
         Commands.runOnce(() -> {
             m_ShootRequestPub.set(true);
@@ -95,8 +97,10 @@ public Command shootSequenceCommand(double velocityX, double velocityY) {
             ),
             Commands.runOnce(() -> {
                 canShoot = true;
+                m_transfer.m_transferMotor.set(TransferShootConstants.kTransferSpeed);
             }, this).finallyDo((interrupted) -> {
                 canShoot = false;
+                m_transfer.m_transferMotor.set(0.0);
             })
         )
     );
