@@ -47,6 +47,10 @@ public class RobotContainer {
     return m_drivetrain;
   }
 
+  public CommandXboxController getDriverController() {
+    return m_driverController;
+  }
+
   //Definne button mappings
   private void configureBindings() {
 

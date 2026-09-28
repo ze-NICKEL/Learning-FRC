@@ -4,14 +4,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 
@@ -29,23 +28,26 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  private SwerveDrivePoseEstimator m_DrivePoseEstimator;
-
   Intake m_Intake = new Intake();
 
   CommandSwerveDrivetrain m_drivetrain;
+
+  CommandXboxController m_driverController;
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   public Robot() {
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData("Field", m_field);
 
+
     m_drivetrain = m_robotContainer.getDrivetrain();
+    m_driverController = m_robotContainer.getDriverController();
 
   }
 
@@ -53,6 +55,14 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
 
     m_field.setRobotPose(m_drivetrain.getState().Pose);
+
+    m_drivetrain.drive(new ChassisSpeeds(
+    -m_driverController.getLeftY() * 5,
+    -m_driverController.getLeftX() * 5,
+     -m_driverController.getRightX() * 5
+      
+    ));
+
     
     CommandScheduler.getInstance().run();
   }
