@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.TransferShootConstants;
 import frc.robot.constants.TunerConstants;
 
@@ -73,28 +74,23 @@ public class Shooter extends SubsystemBase {
     }
 
 
-public Command shootSequenceCommand(Transfer m_transfer, double velocityX, double velocityY) {
-    return Commands.sequence(
+    double[] polarSpeeds = new double[3];
 
+public Command shootSequenceCommand(Transfer m_transfer, double[] polarSpeeds) {
+    return Commands.sequence(
 
         // 1. Initialize
         Commands.runOnce(() -> {
             m_ShootRequestPub.set(true);
-        }, this),
+        }),
  
-        // 2. Drive and shooting state in parallel
         new ParallelCommandGroup(
-            m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle()
-                .withVelocityX(velocityX)
-                .withVelocityY(velocityY)
-                .withTargetDirection(
-                    new Rotation2d(
-                        // goal
-                        targetAngleRelativeToRobot.getRadians() -
-                        m_drivetrain.getState().Pose.getRotation().getRadians()
-                    )
-                )
-            ),
+        m_drivetrain.applyRequest(() -> {
+            return new SwerveRequest.FieldCentric()
+                .withVelocityX(polarSpeeds[0])
+                .withVelocityY(polarSpeeds[1])
+                .withRotationalRate(polarSpeeds[2]);
+        }),
             Commands.runOnce(() -> {
                 canShoot = true;
                 m_transfer.m_transferMotor.set(TransferShootConstants.kTransferSpeed);

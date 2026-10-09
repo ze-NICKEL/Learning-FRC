@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FuelSim;
 import frc.robot.constants.GeneralConstants;
@@ -19,37 +21,58 @@ import frc.robot.subsystems.Transfer;
 public class RobotContainer {
 //Subsystems are defined here
   CommandSwerveDrivetrain m_drivetrain = TunerConstants.createDrivetrain();
+    SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric();
+
 
   private final Intake m_Intake = new Intake();
   private final Transfer m_Transfer = new Transfer();
   private final Shooter m_Shooter = new Shooter(m_drivetrain, m_Transfer);
 
-
   //Controller(s)
   private final CommandXboxController m_driverController =
       new CommandXboxController(GeneralConstants.kDriverControllerPort);
 
+  public double[] polarSpeeds = new double[3];
 
-    //Main robot Container constructor.
+
+  SwerveRequest.FieldCentric m_drivetrainRequest = new SwerveRequest.FieldCentric();
+
+
     public RobotContainer() {
 
-          m_drivetrain.setDefaultCommand(
-          m_drivetrain.applyRequest(() -> new SwerveRequest.FieldCentric()
-              .withVelocityX(-m_driverController.getLeftY() * 0.8)
-              .withVelocityY(-m_driverController.getLeftX() * 0.8)
-              .withRotationalRate(-m_driverController.getRightX() * 0.34)
-          )
-      );
+      SmartDashboard.putNumber("rightX", m_driverController.getRightX());
+SmartDashboard.putNumber("leftX", m_driverController.getLeftX());
+SmartDashboard.putNumber("leftY", m_driverController.getLeftY());
+SmartDashboard.putNumber("rotCmd", polarSpeeds[2]);
 
-      FuelSim.getInstance().spawnStartingFuel();
+      configureBindings();
+    // polarSpeeds[0] = X velocity in meters per second
+    // polarSpeeds[1] = Y velocity in meters per second
+    // polarSpeeds[2] = rotational rate in radians per second
 
-    //Key mappings defined
-    configureBindings();
-  }
+    m_drivetrain.setDefaultCommand(
+        m_drivetrain.applyRequest(() -> {
+            // Process joystick input
+            CommandSwerveDrivetrain.joyStickPolar(
+                polarSpeeds,
+                m_driverController
+            );
 
-  public CommandSwerveDrivetrain getDrivetrain() {
-    return m_drivetrain;
-  }
+            return m_drivetrainRequest
+                .withVelocityX(polarSpeeds[0])
+                .withVelocityY(polarSpeeds[1])
+                .withRotationalRate(polarSpeeds[2] / 20);
+        })
+    );
+
+    //FuelSim.getInstance().spawnStartingFuel();
+
+    }
+
+    public CommandSwerveDrivetrain getDrivetrain() {
+
+      return m_drivetrain;
+    }
 
   public CommandXboxController getDriverController() {
     return m_driverController;
@@ -67,15 +90,13 @@ public class RobotContainer {
 
     //Goes through shooting logic
 
-    m_driverController.rightBumper().whileTrue(
+    /*m_driverController.rightBumper().whileTrue(
       m_Shooter.shootSequenceCommand(
         m_Transfer,
-        m_driverController.getRightY(),
-        m_driverController.getRightX()
+        polarSpeeds
       ).finallyDo(() -> m_Shooter.stopShootMotors()));
     
-
-
+*/
     
   }
 

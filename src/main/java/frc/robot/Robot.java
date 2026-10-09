@@ -28,8 +28,6 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  Intake m_Intake = new Intake();
-
   CommandSwerveDrivetrain m_drivetrain;
 
   CommandXboxController m_driverController;
@@ -56,12 +54,12 @@ public class Robot extends TimedRobot {
 
     m_field.setRobotPose(m_drivetrain.getState().Pose);
 
-    m_drivetrain.drive(new ChassisSpeeds(
+   /*  m_drivetrain.drive(new ChassisSpeeds(
     -m_driverController.getLeftY() * 0.3,
     -m_driverController.getLeftX() * 0.3,
      -m_driverController.getRightX() * 0.3
-      
-    ));
+    
+    )); */
 
     
     CommandScheduler.getInstance().run();
@@ -73,7 +71,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_Intake.stopIntake();
+    
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

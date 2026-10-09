@@ -41,9 +41,15 @@ public class Intake extends SubsystemBase {
 
 public Command fullIntake() {
     return Commands.startEnd(
-        () -> m_topIntakeMotor.set(1.0), // Runs exactly when the button is pressed down
-        () -> m_topIntakeMotor.set(0.0), // Runs exactly when the button is released
-        this                          // Protects the subsystem hardware
+        () -> {
+            m_topIntakeMotor.set(1.0);
+            m_bottomIntakeMotor.set(1.0);
+        },
+        () -> {
+            m_topIntakeMotor.set(0.0);
+            m_bottomIntakeMotor.set(0.0);
+        },
+        this
     );
 }
 
