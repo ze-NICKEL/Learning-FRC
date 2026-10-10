@@ -390,7 +390,6 @@ public static void joyStickPolar(double[] out, CommandXboxController controller)
         double x2 = MathUtil.applyDeadband(-controller.getLeftY(), 0.1);
         double y2 = MathUtil.applyDeadband(-controller.getLeftX(), 0.1);
         double rot2 = MathUtil.applyDeadband(-controller.getRightX(), 0.1);
-        
         // Clamp magnitude to 1.0 to handle square joystick corners
         double r = Math.min(1.0, Math.hypot(x2, y2));
         double theta = Math.atan2(y2, x2);

@@ -6,7 +6,7 @@ package frc.robot;
 
 import java.util.logging.Logger;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
@@ -62,10 +62,13 @@ SmartDashboard.putNumber("rotCmd", polarSpeeds[2]);
     return m_driverController;
   }
 
-private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
-    .withDeadband(0.1); 
-  
+    private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
+            .withDeadband(0).withRotationalDeadband(0) // Deadband handled manually for better feel
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+            
+          
   //Definne button mappings
+  
   private void configureBindings() {
 
     m_drivetrain.setDefaultCommand(
@@ -73,35 +76,33 @@ private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldC
                         CommandSwerveDrivetrain.joyStickPolar(polarSpeeds, m_driverController);
                         return  driveRequest.withVelocityX(polarSpeeds[0]) // Drive forward with negative Y (forward)
                             .withVelocityY(polarSpeeds[1]) // Drive left with negative X (left)
-                            .withRotationalRate(polarSpeeds[2] / 40
-                            
+                            .withRotationalRate(polarSpeeds[2]
                             ); // Drive counterclockwise with negative X (left)
                     })
             );
 
         m_drivetrain.registerTelemetry(logger:: telemeterize);            
-    printValues();
+        printValues();
 
-      }
+      
 
-            
+    
+    m_driverController.x().onTrue(m_Shooter.startShootMotors(TransferShootConstants.kShootSpeed));
 
-    /*m_driverController.x().onTrue(m_Shooter.startShootMotors(TransferShootConstants.kShootSpeed));
-
-
+    
     m_driverController.rightTrigger().whileTrue(m_Intake.fullIntake().finallyDo(() -> m_Intake.stopIntake()));
 
     m_driverController.leftTrigger().whileTrue(m_Transfer.fullTransfer().finallyDo(() -> m_Transfer.forceStopTransfer()));
 
     //Goes through shooting logic
 
-    /*m_driverController.rightBumper().whileTrue(
+    m_driverController.rightBumper().whileTrue(
       m_Shooter.shootSequenceCommand(
         m_Transfer,
         polarSpeeds
       ).finallyDo(() -> m_Shooter.stopShootMotors()));
     
-*/
+   }
     
   }
 
