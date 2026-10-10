@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import java.util.logging.Logger;
+
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.TransferShootConstants;
@@ -53,6 +56,8 @@ SmartDashboard.putNumber("rotCmd", polarSpeeds[2]);
       return m_drivetrain;
     }
 
+    Telemetry logger = new Telemetry(CommandSwerveDrivetrain.MaxSpeed, m_drivetrain.getPigeon2());
+
   public CommandXboxController getDriverController() {
     return m_driverController;
   }
@@ -68,11 +73,13 @@ private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldC
                         CommandSwerveDrivetrain.joyStickPolar(polarSpeeds, m_driverController);
                         return  driveRequest.withVelocityX(polarSpeeds[0]) // Drive forward with negative Y (forward)
                             .withVelocityY(polarSpeeds[1]) // Drive left with negative X (left)
-                            .withRotationalRate(polarSpeeds[2]); // Drive counterclockwise with negative X (left)
+                            .withRotationalRate(polarSpeeds[2] / 40
+                            
+                            ); // Drive counterclockwise with negative X (left)
                     })
             );
 
-
+        m_drivetrain.registerTelemetry(logger:: telemeterize);            
     printValues();
 
       }
