@@ -2,9 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Intake;
+
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -22,15 +23,22 @@ import frc.robot.subsystems.Intake;
 public class Robot extends TimedRobot {
 
 
+
+
   private final Field2d m_field = new Field2d();
+
 
   private Command m_autonomousCommand;
 
+
   private final RobotContainer m_robotContainer;
+
 
   CommandSwerveDrivetrain m_drivetrain;
 
+
   CommandXboxController m_driverController;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,67 +46,87 @@ public class Robot extends TimedRobot {
    */
   public Robot() {
 
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData("Field", m_field);
 
 
+
+
     m_drivetrain = m_robotContainer.getDrivetrain();
     m_driverController = m_robotContainer.getDriverController();
 
+
   }
+
 
   @Override
   public void robotPeriodic() {
 
+
     m_field.setRobotPose(m_drivetrain.getState().Pose);
+
 
    /*  m_drivetrain.drive(new ChassisSpeeds(
     -m_driverController.getLeftY() * 0.3,
     -m_driverController.getLeftX() * 0.3,
      -m_driverController.getRightX() * 0.3
-    
+   
     )); */
 
-    
+
+   
     CommandScheduler.getInstance().run();
   }
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {}
 
+
   @Override
   public void disabledPeriodic() {
-    
+   
   }
 
+
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {}
 
+
   @Override
   public void teleopInit() {
+
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
   }
 
-  
+
+ 
+
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
+
     m_robotContainer.printValues();
+
+
 
 
     SmartDashboard.updateValues();
   }
+
 
   @Override
   public void testInit() {
@@ -106,17 +134,22 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
   }
 
+
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
 
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {}
 
+
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
+        m_robotContainer.fuelSim.updateSim();
+
 
   }
 }
