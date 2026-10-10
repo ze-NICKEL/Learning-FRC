@@ -58,7 +58,7 @@ public class TunerConstants {
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
         .withKP(0.1).withKI(0).withKD(0)
-        .withKS(0.186).withKV(0.11955).withKA(0.0051787);
+        .withKS(0).withKV(0.124).withKA(0);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -235,7 +235,7 @@ public static final Translation2d getTargetPosition() {
         double targetAngle = Math.atan2(deltaY, deltaX);
 
         targetAngle = Math.toDegrees(targetAngle);
-        return new Rotation2d(((targetAngle + robotPose.getRotation().getRadians() - Math.PI)));
+        return new Rotation2d(((targetAngle + robotPose.getRotation().getRadians())));
     }
 
 

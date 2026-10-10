@@ -97,6 +97,7 @@ public Command shootSequenceCommand(Transfer m_transfer, double[] polarSpeeds) {
             }, this).finallyDo((interrupted) -> {
                 canShoot = false;
                 m_transfer.m_transferMotor.set(0.0);
+
             })
         )
     );
