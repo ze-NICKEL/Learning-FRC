@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.FuelSim;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 
@@ -39,6 +40,8 @@ public class Robot extends TimedRobot {
 
   CommandXboxController m_driverController;
 
+  FuelSim m_fuelSim;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -57,7 +60,7 @@ public class Robot extends TimedRobot {
 
     m_drivetrain = m_robotContainer.getDrivetrain();
     m_driverController = m_robotContainer.getDriverController();
-
+    m_fuelSim = m_robotContainer.getFuelSim();
 
   }
 
@@ -104,6 +107,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
+
+    m_fuelSim.spawnStartingFuel();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

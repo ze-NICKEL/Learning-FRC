@@ -27,7 +27,6 @@ public class RobotContainer {
 
     // 1. Define FuelSim ONCE as a final variable
     public final FuelSim fuelSim = new FuelSim("FuelSim");
-
     // Subsystems
     CommandSwerveDrivetrain m_drivetrain = TunerConstants.createDrivetrain();
     private final Intake m_Intake = new Intake();
@@ -40,6 +39,10 @@ public class RobotContainer {
 
     // Drive State Helper
     private double[] polarSpeeds = new double[3];
+
+    public FuelSim getFuelSim() {
+        return fuelSim;
+    }
 
     // Telemetry
     Telemetry logger = new Telemetry(CommandSwerveDrivetrain.MaxSpeed, m_drivetrain.getPigeon2());
@@ -59,12 +62,8 @@ public class RobotContainer {
             .withDeadband(0).withRotationalDeadband(0)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        // --- SIMULATION SETUP (Run Only Once) ---
-        fuelSim.spawnStartingFuel();
-        
         fuelSim.registerRobot(
             0.900, // width (meters)
             0.900, // length (meters)
@@ -72,52 +71,48 @@ public class RobotContainer {
             poseSupplier, 
             fieldSpeedsSupplier
         );
+        m_drivetrain.setDefaultCommand(
+        m_drivetrain.applyRequest(() -> {
+            // Update polarSpeeds array based on joystick input
+            CommandSwerveDrivetrain.joyStickPolar(polarSpeeds, m_driverController);
+            return driveRequest.withVelocityX(polarSpeeds[0]) 
+                .withVelocityY(polarSpeeds[1]) 
+                .withRotationalRate(polarSpeeds[2]); 
+            })
+        );
 
-        // Define the "Magic Box" intake zone
-        fuelSim.registerIntake(0.272, 0.8, -0.45, 0.45);
-        
-        fuelSim.start();  
-        fuelSim.updateSim();
-        // ----------------------------------------
+                SmartDashboard.putData(
+            Commands.runOnce(() -> {
+                fuelSim.clearFuel();
+                fuelSim.spawnStartingFuel();
+                fuelSim.logFuels();
+            })
+            .withName("Reset Fuel")
+            .ignoringDisable(true)
+        );
+        fuelSim.registerIntake(
+            0.272,
+            0.8,
+            -0.45,
+            0.45,
+            () -> m_driverController.rightTrigger().getAsBoolean()
+        );
 
+    fuelSim.start();
+    fuelSim.logFuels();
         configureBindings();
     }
 
     private void configureBindings() {
 
-
-
-        // Dashboard Button to Reset Simulation Fuel
-        SmartDashboard.putData(Commands.runOnce(() -> {
-                fuelSim.clearFuel();
-                fuelSim.spawnStartingFuel();
-            })
-            .withName("Reset Fuel")
-            .ignoringDisable(true));
-
-        // Drivetrain Default Command
-        m_drivetrain.setDefaultCommand(
-            m_drivetrain.applyRequest(() -> {
-                // Update polarSpeeds array based on joystick input
-                CommandSwerveDrivetrain.joyStickPolar(polarSpeeds, m_driverController);
-                
-                return driveRequest.withVelocityX(polarSpeeds[0]) 
-                    .withVelocityY(polarSpeeds[1]) 
-                    .withRotationalRate(polarSpeeds[2]); 
-            })
-        );
-        
-        // Register Telemetry
         m_drivetrain.registerTelemetry(logger::telemeterize);            
         
-        // Intake & Transfer Triggers
-        // --- SHOOTING LOGIC (Real + Sim) ---
-        // Runs the real motor sequence AND the physics calculation at the same time
-m_driverController.rightBumper().whileTrue(
-    m_Shooter.shootSequenceCommand(m_Transfer, polarSpeeds)
-    .alongWith(new LaunchFuelSim(m_drivetrain, fuelSim)) // Combine commands
-    .finallyDo((interrupted) -> m_Shooter.stopShootMotors()) 
-);
+                
+        m_driverController.rightBumper().whileTrue(
+            m_Shooter.shootSequenceCommand(m_Transfer, m_driverController, driveRequest)
+                .alongWith(new LaunchFuelSim(m_drivetrain, fuelSim))
+                .finallyDo(interrupted -> m_Shooter.stopShootMotors())
+        );
     }
 
     public void printValues() {
