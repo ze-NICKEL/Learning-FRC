@@ -99,7 +99,8 @@ SmartDashboard.putNumber("rotCmd", polarSpeeds[2]);
     m_driverController.rightBumper().whileTrue(
       m_Shooter.shootSequenceCommand(
         m_Transfer,
-        polarSpeeds
+        m_driverController,
+        driveRequest
       ).finallyDo(() -> m_Shooter.stopShootMotors()));
     
    }
