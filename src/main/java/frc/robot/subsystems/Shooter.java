@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TransferShootConstants;
 import frc.robot.constants.TunerConstants;
 
@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase {
 
     double[] polarSpeeds = new double[3];
 
-public Command shootSequenceCommand(Transfer m_transfer, double[] polarSpeeds) {
+public Command shootSequenceCommand(Transfer m_transfer, CommandXboxController m_driverController, SwerveRequest.FieldCentric driveRequest) {
     return Commands.sequence(
 
         // 1. Initialize
@@ -86,21 +86,25 @@ public Command shootSequenceCommand(Transfer m_transfer, double[] polarSpeeds) {
  
         new ParallelCommandGroup(
         m_drivetrain.applyRequest(() -> {
-            return new SwerveRequest.FieldCentric()
-                .withVelocityX(polarSpeeds[0])
-                .withVelocityY(polarSpeeds[1])
-                .withRotationalRate(polarSpeeds[2]);
-        }),
+            // Update polarSpeeds array based on joystick input
+            CommandSwerveDrivetrain.joyStickPolar(polarSpeeds, m_driverController);
+            return driveRequest.withVelocityX(polarSpeeds[0]) 
+                .withVelocityY(polarSpeeds[1]) 
+                .withRotationalRate(polarSpeeds[2]); 
+            })
+        ),
             Commands.runOnce(() -> {
                 canShoot = true;
+                startShootMotors(TransferShootConstants.kShootSpeed);
                 m_transfer.m_transferMotor.set(TransferShootConstants.kTransferSpeed);
             }, this).finallyDo((interrupted) -> {
                 canShoot = false;
+                stopShootMotors();
                 m_transfer.m_transferMotor.set(0.0);
 
             })
-        )
-    );
+        );
+    
 }
 
 }
