@@ -1,71 +1,36 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  
-  TalonFX m_topIntakeMotor = new TalonFX(IntakeConstants.kTopIntakeMotorPort);
-  TalonFX m_bottomIntakeMotor = new TalonFX(IntakeConstants.kBottomIntakeMotorPort);
-  
-  NetworkTable m_intakeTable = NetworkTableInstance.getDefault().getTable("Intake");
-  
-  DoublePublisher m_speedPub = m_intakeTable.getDoubleTopic("speed").publish();
 
+    //TODO: FIGURE OUT CONFIG FOR MOTORS
+    //TODO: FIGURE OUT CORRECT WAY TO SET VELOCITY TO MOTORS
+    IntakeConstants intakeConstants = new IntakeConstants();
 
+    TalonFX leftIntakeMotor = new TalonFX(intakeConstants.leftIntakeMotorID);
+    TalonFX rightIntakeMotor = new TalonFX(intakeConstants.rightIntakeMotorID);
 
-  public Intake() {
-    m_topIntakeMotor.getConfigurator().apply(IntakeConstants.getConfig(IntakeConstants.IntakeObject.TOPINTAKE));
-    m_bottomIntakeMotor.getConfigurator().apply(IntakeConstants.getConfig(IntakeConstants.IntakeObject.BOTTOMINTAKE));
+    public Intake() {
 
-  }
+        leftIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(false));
+        rightIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(true));
 
-  //This method will be called once per scheduler run
-  @Override
-  public void periodic() {
-    
-    m_speedPub.set(m_topIntakeMotor.get());
-    
-  }
+    }
 
-public Command fullIntake() {
-    return Commands.startEnd(
-        () -> {
-            m_topIntakeMotor.set(1.0);
-            m_bottomIntakeMotor.set(1.0);
-        },
-        () -> {
-            m_topIntakeMotor.set(0.0);
-            m_bottomIntakeMotor.set(0.0);
-        },
-        this
-    );
-}
+    public Command setVelocity(double velocity) { 
+        return Commands.runOnce(() -> { 
+            leftIntakeMotor.setControl(new VelocityVoltage(velocity)); 
+            rightIntakeMotor.setControl(new VelocityVoltage(velocity)); 
+        }); 
+    }
 
-public Command stopIntake() {
-  return Commands.runOnce(() -> {
-  
-    m_topIntakeMotor.set(0.0);
-    m_bottomIntakeMotor.set(0.0);
-  }, this
-  );
-}
-
-public void setIntakeSpeed(double speed) {
-  m_topIntakeMotor.set(speed);
-  m_bottomIntakeMotor.set(speed);
-}
 
 
 }

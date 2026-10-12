@@ -316,8 +316,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
     }
-
-
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -399,8 +397,6 @@ public static void joyStickPolar(double[] out, CommandXboxController controller)
             out[2] = Math.copySign(rot2 * MaxAngularRate, rot2);
             return;
         }
-
-
         // Use a simple multiplication for power of 2 for efficiency as the comment suggests
         double rScaled = Math.pow(r, SwerveConstants.kDrivePower);
 

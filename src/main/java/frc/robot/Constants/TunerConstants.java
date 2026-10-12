@@ -7,6 +7,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -226,7 +228,15 @@ public static final Translation2d getTargetPosition() {
     return blueTargetPosition; 
 }
 
-   
+
+    public Alliance getAlliance() {
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get();
+        }
+        // Return a default fallback (e.g., Blue) if the FMS/Driver Station hasn't sent data yet
+        return Alliance.Blue; 
+    }
 
     public static Rotation2d getTargetAngleRelativeToRobot(Pose2d robotPose, Translation2d targetPosition) {
         double deltaX = targetPosition.getX() - robotPose.getX();

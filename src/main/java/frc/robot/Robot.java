@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.constants.FuelSim;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 
@@ -33,16 +32,7 @@ public class Robot extends TimedRobot {
 
 
   private final RobotContainer m_robotContainer;
-
-
-  CommandSwerveDrivetrain m_drivetrain;
-
-
-  CommandXboxController m_driverController;
-
-  FuelSim m_fuelSim;
-
-
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -55,21 +45,12 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData("Field", m_field);
 
-
-
-
-    m_drivetrain = m_robotContainer.getDrivetrain();
-    m_driverController = m_robotContainer.getDriverController();
-    m_fuelSim = m_robotContainer.getFuelSim();
-
   }
 
 
   @Override
   public void robotPeriodic() {
-
-
-    m_field.setRobotPose(m_drivetrain.getState().Pose);
+    m_field.setRobotPose(m_robotContainer.getDrivetrain().getState().Pose);
 
 
    /*  m_drivetrain.drive(new ChassisSpeeds(
@@ -107,27 +88,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
-
-    m_fuelSim.spawnStartingFuel();
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
   }
 
 
- 
-
-
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
-
-    m_robotContainer.printValues();
-
-
-
 
     SmartDashboard.updateValues();
   }
@@ -153,8 +122,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-        m_robotContainer.fuelSim.updateSim();
-
 
   }
 }
