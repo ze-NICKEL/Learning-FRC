@@ -9,6 +9,7 @@ import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Transfer;
 
 public class RobotContainer {
 
@@ -16,7 +17,9 @@ public class RobotContainer {
 
   CommandXboxController driverController = new CommandXboxController(0);
 
+  //SUBSYSTEMS
   Intake intake = new Intake();
+  Transfer transfer = new Transfer();
 
 
     public RobotContainer() {
@@ -25,8 +28,10 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-      driverController.rightTrigger().onTrue(intake.setVelocity(IntakeConstants.intakeVelocityRPS));
+      //TODO: Fix intake binding so all velocity request are handled in class
 
+      driverController.rightTrigger().onTrue(intake.setVelocity(IntakeConstants.intakeVelocityRPS)).onFalse(intake.setVelocity(0));
+      driverController.rightBumper().onTrue(transfer.transfer()).onFalse(transfer.stopTransfer());
     }
 
 
