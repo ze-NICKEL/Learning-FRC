@@ -12,20 +12,34 @@ public class Intake extends SubsystemBase {
 
     //TODO: FIGURE OUT CONFIG FOR MOTORS
     //TODO: FIGURE OUT CORRECT WAY TO SET VELOCITY TO MOTORS
+
     IntakeConstants intakeConstants = new IntakeConstants();
 
     TalonFX leftIntakeMotor = new TalonFX(intakeConstants.leftIntakeMotorID);
     TalonFX rightIntakeMotor = new TalonFX(intakeConstants.rightIntakeMotorID);
+
+    TalonFX leftRetractMotor = new TalonFX(IntakeConstants.leftRetractID);
+    TalonFX rightRetractMotor = new TalonFX(IntakeConstants.rightRetractID);
 
     public Intake() {
 
         leftIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(false));
         rightIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(true));
 
+        leftRetractMotor.getConfigurator().apply(IntakeConstants.getRetractMotorConfiguration(false));
+        rightRetractMotor.getConfigurator().apply(IntakeConstants.getRetractMotorConfiguration(true));
+
+    }
+
+    @Override
+    public void periodic() {
+        
     }
 
     public Command fullIntake() { 
         return Commands.runOnce(() -> { 
+            leftRetractMotor.setPosition(IntakeConstants.retractDistance);
+            rightRetractMotor.setPosition(IntakeConstants.retractDistance);
             leftIntakeMotor.setControl(new VelocityVoltage(IntakeConstants.intakeVelocityRPS)); 
             rightIntakeMotor.setControl(new VelocityVoltage(IntakeConstants.intakeVelocityRPS)); 
         }); 
@@ -33,6 +47,8 @@ public class Intake extends SubsystemBase {
 
     public Command stopIntake() {
         return Commands.runOnce(() -> {
+            leftRetractMotor.setPosition(0);
+            rightRetractMotor.setPosition(0);
             leftIntakeMotor.set(0); 
             rightIntakeMotor.set(0);
         });

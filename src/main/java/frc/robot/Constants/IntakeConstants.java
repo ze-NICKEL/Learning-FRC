@@ -8,12 +8,21 @@ public class IntakeConstants {
     public int rightIntakeMotorID = 2;
 
     public static double intakeVelocityRPS = 50;
+    
+    public static int leftRetractID = 4;
+    public static int rightRetractID = 5;
 
 
+    public static double retractDistance = 10;
 
 
+    public static TalonFXConfiguration getIntakeMotorConfig(boolean isInverted) {
+        TalonFXConfiguration config = new TalonFXConfiguration();
 
- public static TalonFXConfiguration getIntakeMotorConfig(boolean isInverted) {
+        return config;
+    }
+
+    public static TalonFXConfiguration getRetractMotorConfiguration(boolean isInverted) {
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         return config;
