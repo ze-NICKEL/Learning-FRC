@@ -24,11 +24,18 @@ public class Intake extends SubsystemBase {
 
     }
 
-    public Command setVelocity(double velocity) { 
+    public Command fullIntake() { 
         return Commands.runOnce(() -> { 
-            leftIntakeMotor.setControl(new VelocityVoltage(velocity)); 
-            rightIntakeMotor.setControl(new VelocityVoltage(velocity)); 
+            leftIntakeMotor.setControl(new VelocityVoltage(IntakeConstants.intakeVelocityRPS)); 
+            rightIntakeMotor.setControl(new VelocityVoltage(IntakeConstants.intakeVelocityRPS)); 
         }); 
+    }
+
+    public Command stopIntake() {
+        return Commands.runOnce(() -> {
+            leftIntakeMotor.set(0); 
+            rightIntakeMotor.set(0);
+        });
     }
 
 

@@ -28,9 +28,7 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-      //TODO: Fix intake binding so all velocity request are handled in class
-
-      driverController.rightTrigger().onTrue(intake.setVelocity(IntakeConstants.intakeVelocityRPS)).onFalse(intake.setVelocity(0));
+      driverController.rightTrigger().onTrue(intake.fullIntake()).onFalse(intake.stopIntake());
       driverController.rightBumper().onTrue(transfer.transfer()).onFalse(transfer.stopTransfer());
     }
 
