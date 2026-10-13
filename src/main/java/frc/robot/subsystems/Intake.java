@@ -50,7 +50,4 @@ public class Intake extends SubsystemBase {
             rightIntakeMotor.set(0);
         });
     }
-
-
-
 }
