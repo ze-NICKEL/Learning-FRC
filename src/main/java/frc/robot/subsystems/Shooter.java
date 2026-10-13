@@ -38,5 +38,6 @@ public class Shooter extends SubsystemBase {
             leftShooterMotor.set(velocity);
             rightShooterMotor.set(velocity);
         });
+                
     }
 }
