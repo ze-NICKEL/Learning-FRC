@@ -15,9 +15,7 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         //TODO: ADD HOOD REGRESSION HERE
-        
     }
     
 }
