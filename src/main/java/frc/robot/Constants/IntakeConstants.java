@@ -10,7 +10,7 @@ public class IntakeConstants {
     public int leftIntakeMotorID = 1;
     public int rightIntakeMotorID = 2;
 
-    public static double intakeVelocityRPS = 50;
+    public static double intakeVelocityRPS = 20;
     
     public static int leftRetractID = 4;
     public static int rightRetractID = 5;
