@@ -10,9 +10,6 @@ import frc.robot.constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
-    //TODO: FIGURE OUT CONFIG FOR MOTORS
-    //TODO: FIGURE OUT CORRECT WAY TO SET VELOCITY TO MOTORS
-
     IntakeConstants intakeConstants = new IntakeConstants();
 
     TalonFX leftIntakeMotor = new TalonFX(intakeConstants.leftIntakeMotorID);
