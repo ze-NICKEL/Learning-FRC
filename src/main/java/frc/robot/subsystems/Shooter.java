@@ -42,11 +42,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command autoShoot(Transfer transfer) {
-        return Commands.runOnce(() ->
+        return Commands.runOnce(() -> {
 
-        shoot(TransferShootConstants.autoShootVelocity)
+        shoot(TransferShootConstants.autoShootVelocity);
+        transfer.transfer();
         
-        );
-    }
+    });
+    }   
 
 }

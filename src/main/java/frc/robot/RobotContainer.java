@@ -42,7 +42,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("intake", intake.fullIntake());
     NamedCommands.registerCommand("shoot", shooter.autoShoot(transfer));
       
-      
     configureBindings();
 
   }
