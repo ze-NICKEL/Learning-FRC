@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
     }
 
 
-    Command shoot(double velocity) {
+    public Command shoot(double velocity) {
         return Commands.runOnce(() -> {
             //TODO: TUNE FOR FLYWHEEL VELOCITY
             leftShooterMotor.set(velocity);
@@ -40,4 +40,13 @@ public class Shooter extends SubsystemBase {
         });
                 
     }
+
+    public Command autoShoot(Transfer transfer) {
+        return Commands.runOnce(() ->
+
+        shoot(TransferShootConstants.autoShootVelocity)
+        
+        );
+    }
+
 }

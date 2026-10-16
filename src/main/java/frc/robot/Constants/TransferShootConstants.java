@@ -42,5 +42,7 @@ public class TransferShootConstants {
     public static double closeZoneVelocity = 2000;
 
     public static double farZoneVelocity = 4000;
+
+    public static double autoShootVelocity = 2700;
     
 }

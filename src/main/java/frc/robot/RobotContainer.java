@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Transfer;
 
 public class RobotContainer {
@@ -20,9 +23,17 @@ public class RobotContainer {
   Intake intake = new Intake();
   Transfer transfer = new Transfer();
 
+  Shooter shooter = new Shooter();
+
 
     public RobotContainer() {
-        configureBindings();
+
+      NamedCommands.registerCommand("intake", intake.fullIntake());
+      NamedCommands.registerCommand("shoot", shooter.autoShoot(transfer));
+      
+      
+      configureBindings();
+
     }
 
     private void configureBindings() {
