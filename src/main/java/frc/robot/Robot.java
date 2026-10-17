@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Shooter; 
-
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -23,11 +21,6 @@ import frc.robot.subsystems.Shooter;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
-
-  Shooter shooter;
-
-
-
 
   private final Field2d m_field = new Field2d();
 
