@@ -61,9 +61,6 @@ public class RobotContainer {
   public Shooter getShooter() {
     return this.shooter;
   }
-
-
-
     private void configureBindings() {
       double[] driverInputs = new double[3];
 
@@ -93,11 +90,6 @@ public class RobotContainer {
           );
 
           */
-
-
-      
-      
-    
     }
 
 
