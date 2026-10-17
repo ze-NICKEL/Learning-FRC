@@ -229,6 +229,37 @@ public static final Translation2d getTargetPosition() {
 }
 
 
+public enum ZONE {
+    CLOSE,
+    //MEDIUM,
+    FAR
+}
+
+
+public ZONE getZone(Pose2d currentPose) {
+
+    double dx = getTargetPosition().getX() - currentPose.getX();
+
+    double dy = getTargetPosition().getY() - currentPose.getY();
+
+    double xsq = Math.pow(dx, 2);
+    double ysq = Math.pow(dy, 2);
+
+
+
+    //TODO: TUNE CLOSE ZONE LOCATION
+    if (Math.sqrt(xsq + ysq) <= 0.9144) {
+        return ZONE.CLOSE;
+    }
+    /*else if (Math.sqrt(xsq + ysq) <= 1.8288) {
+        return ZONE.MEDIUM;
+    }*/
+
+    else {
+        return ZONE.FAR;
+    }
+}
+
     public Alliance getAlliance() {
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {

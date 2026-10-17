@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -23,14 +25,18 @@ public class RobotContainer {
 
   CommandXboxController driverController = new CommandXboxController(0);
 
+
   //SUBSYSTEMS
   Intake intake = new Intake();
   Transfer transfer = new Transfer();
 
-  Shooter shooter = new Shooter();
+  Shooter shooter = new Shooter(this.drivetrain);
 
   private final SendableChooser<Command> autoChooser;
 
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+          .withDeadband(0).withRotationalDeadband(0) // Deadband handled manually for better feel
+          .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
 
   public RobotContainer() {
@@ -41,17 +47,57 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("intake", intake.fullIntake());
     NamedCommands.registerCommand("shoot", shooter.autoShoot(transfer));
-      
+    NamedCommands.registerCommand("stopShoot", shooter.stopShoot(transfer));
+    NamedCommands.registerCommand("stopIntake", intake.stopIntake());
+
+
     configureBindings();
 
+
+
+
+  }
+
+  public Shooter getShooter() {
+    return this.shooter;
   }
 
 
 
     private void configureBindings() {
+      double[] driverInputs = new double[3];
 
-      driverController.rightTrigger().onTrue(intake.fullIntake()).onFalse(intake.stopIntake());
-      driverController.rightBumper().onTrue(transfer.transfer()).onFalse(transfer.stopTransfer());
+      CommandSwerveDrivetrain.joyStickPolar(driverInputs, driverController);
+      
+      
+      drivetrain.setDefaultCommand(
+
+
+          drivetrain.applyRequest(() -> {
+            CommandSwerveDrivetrain.joyStickPolar(driverInputs, driverController);
+            return drive.withVelocityX(driverInputs[0])
+                        .withVelocityY(driverInputs[1])
+                        .withRotationalRate(driverInputs[2]);
+          })
+      );
+      
+      /*  SOTM code
+      
+      drivetrain.setDefaultCommand(
+              LockHeading.driveWithGoalAim(
+                  drivetrain,
+                  -driverController.getRightY(),
+                  -driverController.getRightX(),
+                  TunerConstants.getTargetPosition()
+              )
+          );
+
+          */
+
+
+      
+      
+    
     }
 
 

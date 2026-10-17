@@ -38,8 +38,10 @@ public class TransferShootConstants {
         return config;
     }
 
-
+    //TODO: TUNE
     public static double closeZoneVelocity = 2000;
+
+    //public static double mediumZoneVelocity = 3000;
 
     public static double farZoneVelocity = 4000;
 
