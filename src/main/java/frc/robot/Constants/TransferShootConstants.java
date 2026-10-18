@@ -14,18 +14,42 @@ public class TransferShootConstants {
     public static final int leftShooterMotorID = 4;
     public static final int rightShooterMotorID = 5;
 
+
+    public static TalonFXConfiguration getTransferMotorConfig() {
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        Slot0Configs slot0 = config.Slot0;
+
+        slot0.kP = 0.0;
+        slot0.kI = 0.0;
+        slot0.kD = 0.0;
+        slot0.kS = 0.0;
+        slot0.kV = 0.0;
+        slot0.kA = 0.0;
+
+        config.CurrentLimits.SupplyCurrentLimit = 10.0;
+
+        config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+
+        config.Feedback.SensorToMechanismRatio = 1.0;
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+        return config;
+    }
+
     public static TalonFXConfiguration getShooterMotorConfig(boolean isInverted) {
         TalonFXConfiguration config = new TalonFXConfiguration();
         Slot0Configs slot0 = config.Slot0;
 
-        slot0.kP = 35.0;
+        slot0.kP = 0.0;
         slot0.kI = 0.0;
         slot0.kD = 0.0;
-        slot0.kS = 4.8;
+        slot0.kS = 0.0;
         slot0.kV = 0.0;
-        slot0.kA = 0.245143636466;
+        slot0.kA = 0.0;
 
-        config.CurrentLimits.SupplyCurrentLimit = 35.0;
+        config.CurrentLimits.SupplyCurrentLimit = 0.0;
 
         config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
 

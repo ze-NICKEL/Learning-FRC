@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,6 +26,8 @@ public class Shooter extends SubsystemBase {
 
     DoublePublisher m_flywheelVelPub = m_table.getDoubleTopic("Flywheel/CurrentRPS").publish();
 
+
+    private final VelocityTorqueCurrentFOC flywheelRequest = new VelocityTorqueCurrentFOC(0.0);
 
     double desiredFlwheelRPS = 0;
 
@@ -88,8 +92,8 @@ public class Shooter extends SubsystemBase {
 
     Command setFlywheelVelRPS(double velocity) {
         return Commands.runOnce(() -> {
-            leftShooterMotor.set(velocity);
-            rightShooterMotor.set(velocity);
+            leftShooterMotor.setControl(flywheelRequest.withVelocity(velocity));
+            rightShooterMotor.setControl(flywheelRequest.withVelocity(velocity));
         });
                 
     }

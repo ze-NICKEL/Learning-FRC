@@ -12,7 +12,6 @@ import frc.robot.constants.TurretConstants;
 public class Turret extends SubsystemBase {
     private final TalonFX turretMotor = new TalonFX(TurretConstants.turretMotorID);
     
-    // Create a reusable control request object to avoid garbage collection overhead in periodic
     private final PositionVoltage positionControl = new PositionVoltage(0);
 
     private final CommandSwerveDrivetrain drivetrain;
@@ -33,14 +32,13 @@ public class Turret extends SubsystemBase {
         double dx = targetPose.getX() - robotPose.getX();
         double dy = targetPose.getY() - robotPose.getY();
 
-        Rotation2d angleToTarget = new Rotation2d(dx, dy); // WPILib automatically handles Math.atan2(dy, dx)
+        Rotation2d angleToTarget = new Rotation2d(dx, dy); 
 
         Rotation2d relativeTurretAngle = angleToTarget.minus(robotPose.getRotation());
 
         //TODO: Get turret motor gear ratio 
         double targetMotorRotations = relativeTurretAngle.getRotations(); // * TurretConstants.GEAR_RATIO;
 
-        // 5. Correctly command the motor to use closed-loop position control
         turretMotor.setControl(positionControl.withPosition(targetMotorRotations));
     }
 }

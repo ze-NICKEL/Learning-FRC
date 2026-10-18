@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -17,6 +18,8 @@ public class Intake extends SubsystemBase {
 
     TalonFX leftRetractMotor = new TalonFX(IntakeConstants.leftRetractID);
     TalonFX rightRetractMotor = new TalonFX(IntakeConstants.rightRetractID);
+
+    VelocityTorqueCurrentFOC intakeRequest = new VelocityTorqueCurrentFOC(0.0);
 
     public Intake() {
 
@@ -37,10 +40,10 @@ public class Intake extends SubsystemBase {
         return Commands.runOnce(() -> { 
             leftRetractMotor.setPosition(IntakeConstants.retractDistance);
             rightRetractMotor.setPosition(IntakeConstants.retractDistance);
-            leftIntakeMotor.setControl(new VelocityVoltage(IntakeConstants.intakeVelocityRPS)); 
-            rightIntakeMotor.setControl(new VelocityVoltage(IntakeConstants.intakeVelocityRPS)); 
+            leftIntakeMotor.setControl(intakeRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 
+            rightIntakeMotor.setControl(intakeRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 
         }); 
-    }
+    }  
 
     public Command stopIntake() {
         return Commands.runOnce(() -> {

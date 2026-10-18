@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -14,14 +15,19 @@ public class Transfer extends SubsystemBase {
     TalonFX transferMotor = new TalonFX(TransferShootConstants.transferMotorID);
 
 
+    VelocityTorqueCurrentFOC transferRequest = new VelocityTorqueCurrentFOC(0);
+
+
     public Transfer() {
+
+        transferMotor.getConfigurator().apply(TransferShootConstants.getTransferMotorConfig());
     
     }
 
 
     public Command transfer() {
         return Commands.runOnce(() ->
-            transferMotor.setControl(new VelocityVoltage(TransferShootConstants.transferSpeedRPS))
+            transferMotor.setControl(transferRequest.withVelocity(TransferShootConstants.transferSpeedRPS))
         );
     }
 
