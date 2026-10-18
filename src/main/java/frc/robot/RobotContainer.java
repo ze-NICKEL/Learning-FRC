@@ -42,13 +42,14 @@ public class RobotContainer {
   public RobotContainer() {
 
 
-    autoChooser = AutoBuilder.buildAutoChooser("BlueFirstAut");
+    autoChooser = AutoBuilder.buildAutoChooser("BlueFirstAuto");
     SmartDashboard.putData("Auto Mode", autoChooser);
 
     NamedCommands.registerCommand("intake", intake.fullIntake());
-    NamedCommands.registerCommand("shoot", shooter.autoShoot(transfer));
+    NamedCommands.registerCommand("shoot", shooter.autoShoot());
     NamedCommands.registerCommand("stopShoot", shooter.stopShoot(transfer));
     NamedCommands.registerCommand("stopIntake", intake.stopIntake());
+    NamedCommands.registerCommand("transfer", transfer.transfer());
 
 
     configureBindings();

@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command fullIntake() { 
-        return Commands.runOnce(() -> { 
+        return Commands.run(() -> { 
             leftRetractMotor.setPosition(IntakeConstants.retractDistance);
             rightRetractMotor.setPosition(IntakeConstants.retractDistance);
             leftIntakeMotor.setControl(intakeRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 

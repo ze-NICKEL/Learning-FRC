@@ -72,7 +72,7 @@ public class Shooter extends SubsystemBase {
             desiredFlwheelRPS = TransferShootConstants.autoShootVelocity;
         }
 
-        setFlywheelVelRPS(desiredFlwheelRPS);
+        setDesiredFlywheel();
 
     }
 
@@ -106,11 +106,10 @@ public class Shooter extends SubsystemBase {
         );
     }
 
-    public Command autoShoot(Transfer transfer) {
+    public Command autoShoot() {
         return Commands.runOnce(() -> {
 
         setFlywheelVelRPS(TransferShootConstants.autoShootVelocity);
-        transfer.transfer();
         
     });
     }

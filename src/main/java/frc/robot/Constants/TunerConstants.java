@@ -275,8 +275,9 @@ public ZONE getZone(Pose2d currentPose) {
 
         double targetAngle = Math.atan2(deltaY, deltaX);
 
-        targetAngle = Math.toDegrees(targetAngle);
-        return new Rotation2d(((targetAngle + robotPose.getRotation().getRadians())));
+        //targetAngle is in radians
+
+        return new Rotation2d(targetAngle + robotPose.getRotation().getRadians());
     }
 
 
