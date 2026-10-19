@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -19,8 +21,10 @@ public class Intake extends SubsystemBase {
     TalonFX leftRetractMotor = new TalonFX(IntakeConstants.leftRetractID);
     TalonFX rightRetractMotor = new TalonFX(IntakeConstants.rightRetractID);
 
-    VelocityTorqueCurrentFOC intakeRequest = new VelocityTorqueCurrentFOC(0.0);
+    VelocityTorqueCurrentFOC intakeVelRequest = new VelocityTorqueCurrentFOC(0.0);
 
+
+    MotionMagicVoltage retractRequest = new MotionMagicVoltage(0.0);
     public Intake() {
 
         leftIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(false));
@@ -38,19 +42,19 @@ public class Intake extends SubsystemBase {
 
     public Command fullIntake() { 
         return Commands.run(() -> { 
-            leftRetractMotor.setPosition(IntakeConstants.retractDistance);
-            rightRetractMotor.setPosition(IntakeConstants.retractDistance);
-            leftIntakeMotor.setControl(intakeRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 
-            rightIntakeMotor.setControl(intakeRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 
-        }); 
+            leftRetractMotor.setControl(retractRequest.withPosition(IntakeConstants.retractDistance));
+            rightRetractMotor.setControl(retractRequest.withPosition(IntakeConstants.retractDistance));
+            leftIntakeMotor.setControl(intakeVelRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 
+            rightIntakeMotor.setControl(intakeVelRequest.withVelocity(IntakeConstants.intakeVelocityRPS)); 
+        }, this); 
     }  
 
     public Command stopIntake() {
         return Commands.runOnce(() -> {
-            leftRetractMotor.setPosition(0);
-            rightRetractMotor.setPosition(0);
+            leftRetractMotor.setControl(retractRequest.withPosition(0));
+            rightRetractMotor.setControl(retractRequest.withPosition(0));
             leftIntakeMotor.set(0); 
             rightIntakeMotor.set(0);
-        });
+        }, this);
     }
 }

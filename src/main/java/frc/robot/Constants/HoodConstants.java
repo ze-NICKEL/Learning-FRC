@@ -6,7 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class HoodConstants {
-    public static final int hoodMotorID = 6;
+    public static final int hoodMotorID = 9;
     public static final double hoodMaxLimit = 0.0;
     public static final double hoodMinLimit = -90.0;
 

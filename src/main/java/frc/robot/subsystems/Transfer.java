@@ -25,16 +25,23 @@ public class Transfer extends SubsystemBase {
     }
 
 
-    public Command transfer() {
+    public Command transferCommand() {
         return Commands.runOnce(() ->
             transferMotor.setControl(transferRequest.withVelocity(TransferShootConstants.transferSpeedRPS))
-        );
+        , this) ;
     }
 
-    public Command stopTransfer() {
-        return new InstantCommand(() ->
-            transferMotor.set(0)
-        );
+    public void transfer() {
+        transferMotor.setControl(transferRequest.withVelocity(TransferShootConstants.transferSpeedRPS));
+    }
+    public Command stopAutoTransfer() {
+        return Commands.runOnce(() -> {
+            transferMotor.set(0);
+        }, this);
+    }
+
+    public void stopTransfer() {
+            transferMotor.set(0);
     }
     
 }

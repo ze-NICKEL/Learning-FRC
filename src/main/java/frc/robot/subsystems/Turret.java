@@ -15,7 +15,7 @@ public class Turret extends SubsystemBase {
     private final PositionVoltage positionControl = new PositionVoltage(0);
 
     private final CommandSwerveDrivetrain drivetrain;
-    private final Translation2d targetPose;
+    private Translation2d targetPose;
 
     public Turret(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;

@@ -10,7 +10,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.TransferShootConstants;
 import frc.robot.constants.TunerConstants;
@@ -37,13 +39,18 @@ public class Shooter extends SubsystemBase {
 
     TunerConstants tunerConstants = new TunerConstants();
 
+    boolean shootAllowed = false;
+    boolean shootRequested = false;
+
     Pose2d currentPose;
 
-    public Shooter(CommandSwerveDrivetrain drivetrain) {
+    Transfer transfer;
+
+    public Shooter(CommandSwerveDrivetrain drivetrain, Transfer transfer) {
         leftShooterMotor.getConfigurator().apply(TransferShootConstants.getShooterMotorConfig(false));
         rightShooterMotor.getConfigurator().apply(TransferShootConstants.getShooterMotorConfig(true));
         this.drivetrain = drivetrain;
-    
+        this.transfer = transfer;
     
     }
 
@@ -66,59 +73,79 @@ public class Shooter extends SubsystemBase {
 
         m_flywheelVelPub.set(leftShooterMotor.getVelocity().getValueAsDouble());
 
+        if (shootAllowed) {
+            setFlywheelVelRPS(desiredFlwheelRPS);
 
+            if (shootRequested) {
+                transfer.transfer();
+            }
+            else {
+                transfer.stopTransfer();
+            }
         }
         else {
+            setFlywheelVelRPS(0);
+            transfer.stopTransfer();
+
+        }
+
+        }
+        else if (DriverStation.isAutonomousEnabled()) {
             desiredFlwheelRPS = TransferShootConstants.autoShootVelocity;
+            setFlywheelVelRPS(desiredFlwheelRPS);
         }
 
-        setDesiredFlywheel();
 
     }
 
-    /*
-   @Override
-    public void periodic() {
-
-        if (inCloseZone) {
-            shoot(TransferShootConstants.closeZoneVelocity);
-        }
-        else {
-            shoot(TransferShootConstants.farZoneVelocity);
-        }
-    }
-     */
-
-
-    Command setFlywheelVelRPS(double velocity) {
-        return Commands.runOnce(() -> {
+    public void setFlywheelVelRPS(double velocity) {
             leftShooterMotor.setControl(flywheelRequest.withVelocity(velocity));
-            rightShooterMotor.setControl(flywheelRequest.withVelocity(velocity));
-        });
-                
+            rightShooterMotor.setControl(flywheelRequest.withVelocity(velocity));        
     }
 
     Command setDesiredFlywheel() {
         return Commands.runOnce(() ->
-        
         setFlywheelVelRPS(desiredFlwheelRPS)
-        
-        );
+        , this);
     }
 
-    public Command autoShoot() {
+    public void resetShootState() {
+    shootAllowed = false;
+    shootRequested = false;
+    }
+
+    public Command setFlywheelInitial() {
         return Commands.runOnce(() -> {
 
         setFlywheelVelRPS(TransferShootConstants.autoShootVelocity);
+        transfer.transfer();
         
-    });
+    }, this);
     }
-    
-    public Command stopShoot(Transfer transfer) {
 
-        return Commands.runOnce(() ->
-        transfer.stopTransfer()
-    );
-}
+    public Command allowShoot() {
+        return new InstantCommand(() -> {
+            shootAllowed = true;
+        });
+    }
+
+    public Command disallowShoot() {
+        return new InstantCommand(() -> {
+            shootAllowed = false;
+        });
+    }
+
+    public Command requestShoot() {
+        return new InstantCommand(() -> {
+            shootRequested = true;
+        });
+    }
+
+
+    public Command stopShootRequest() {
+        return new InstantCommand(() -> {
+            shootRequested = false;
+        });
+    }
 
 }

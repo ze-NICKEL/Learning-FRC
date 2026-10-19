@@ -11,8 +11,8 @@ public class TransferShootConstants {
     
     public static final double transferSpeedRPS = 5;
 
-    public static final int leftShooterMotorID = 4;
-    public static final int rightShooterMotorID = 5;
+    public static final int leftShooterMotorID = 6;
+    public static final int rightShooterMotorID = 7;
 
 
     public static TalonFXConfiguration getTransferMotorConfig() {
@@ -63,12 +63,12 @@ public class TransferShootConstants {
     }
 
     //TODO: TUNE
-    public static double closeZoneVelocity = 2000;
+    public static double closeZoneVelocity = 33;
 
     //public static double mediumZoneVelocity = 3000;
 
-    public static double farZoneVelocity = 4000;
+    public static double farZoneVelocity = 44;
 
-    public static double autoShootVelocity = 2700;
+    public static double autoShootVelocity = 37;
     
 }

@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class TurretConstants {
 
-    public static int turretMotorID = 6;
+    public static int turretMotorID = 8;
 
 
     public static TalonFXConfiguration getTurretMotorConfig() {
