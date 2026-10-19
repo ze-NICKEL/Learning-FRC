@@ -23,6 +23,9 @@ public class Turret extends SubsystemBase {
         
         // Apply configurations
         turretMotor.getConfigurator().apply(TurretConstants.getTurretMotorConfig());
+        
+        this.targetPose = TunerConstants.getTargetPosition();
+    
     }
 
     @Override
