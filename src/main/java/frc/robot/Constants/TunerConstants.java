@@ -202,16 +202,20 @@ public class TunerConstants {
 
     //GOAL POSITIONs(TRANSLATION2D) FOR RED AND BLUE ALLIANCE
 
-    public static final Translation2d redTargetPosition = new Translation2d(
+    public static final Translation2d redTargetPosition =
+
+    /*
         AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded).getTagPose(10).get().getX(),
         AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded).getTagPose(10).get().getY()
-    );
+        */
+        SwerveConstants.redHub;
+        
 
 
-        public static final Translation2d blueTargetPosition = new Translation2d(
-        AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded).getTagPose(26).get().getX(),
-        AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded).getTagPose(26).get().getY()
-    );
+        public static final Translation2d blueTargetPosition = 
+        
+        SwerveConstants.blueHub;
+    ;
 
 //Checks if the alliance is present, and returns correct target position based on alliance color. If no alliance is present, it defaults to blue target position.
 public static final Translation2d getTargetPosition() {
@@ -278,7 +282,7 @@ public ZONE getZone(Pose2d currentPose) {
 
         //targetAngle is in radians
 
-        return new Rotation2d(targetAngle + robotPose.getRotation().getRadians());
+        return new Rotation2d(targetAngle - robotPose.getRotation().getRadians());
     }
 
 

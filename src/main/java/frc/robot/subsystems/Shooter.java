@@ -130,16 +130,17 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command requestShoot() {
-        return new InstantCommand(() -> {
-            shootRequested = true;
-        });
+        return Commands.startEnd(
+            () -> shootRequested = true,
+            () -> shootRequested = false,
+            this);
     }
 
 
     public Command stopShootRequest() {
-        return new InstantCommand(() -> {
+        return Commands.run(() -> {
             shootRequested = false;
-        });
+        }, this);
     }
 
 }

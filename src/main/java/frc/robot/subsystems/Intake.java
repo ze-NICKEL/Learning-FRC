@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
     }  
 
     public Command stopIntake() {
-        return Commands.runOnce(() -> {
+        return Commands.run(() -> {
             leftRetractMotor.setControl(retractRequest.withPosition(0));
             rightRetractMotor.setControl(retractRequest.withPosition(0));
             leftIntakeMotor.set(0); 

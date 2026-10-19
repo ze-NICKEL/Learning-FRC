@@ -9,8 +9,8 @@ public class TurretConstants {
 
     public static int turretMotorID = 8;
 
-    static double turretMaxLimit = 220.0;
-    static double turretMinLimit = -220.0;
+    public static double turretMaxLimit = 220.0;
+    public static double turretMinLimit = -220.0;
     
     
         public static TalonFXConfiguration getTurretMotorConfig() {
@@ -33,8 +33,6 @@ public class TurretConstants {
             
             config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
             config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    
-            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     
             config.ClosedLoopGeneral.ContinuousWrap = false;
 

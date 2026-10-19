@@ -33,15 +33,23 @@ public class Turret extends SubsystemBase {
         targetPose = TunerConstants.getTargetPosition();
         Pose2d robotPose = drivetrain.getState().Pose;
 
-        double dx = targetPose.getX() - robotPose.getX();
-        double dy = targetPose.getY() - robotPose.getY();
-
-        Rotation2d angleToTarget = new Rotation2d(dx, dy); 
-
-        Rotation2d relativeTurretAngle = angleToTarget.minus(robotPose.getRotation());
+        Rotation2d relativeTurretAngle =
+            TunerConstants.getTargetAngleRelativeToRobot(robotPose, targetPose);
 
         //TODO: Get turret motor gear ratio 
         double targetMotorRotations = relativeTurretAngle.getRotations(); // * TurretConstants.GEAR_RATIO;
+
+        double currentMotorRotations = turretMotor.getPosition().getValueAsDouble();
+        double alternateTarget = targetMotorRotations
+            + (targetMotorRotations < currentMotorRotations ? 1.0 : -1.0);
+
+        // Nearest equivalent rotation
+        if (alternateTarget >= TurretConstants.turretMinLimit / 360.0
+                && alternateTarget <= TurretConstants.turretMaxLimit / 360.0
+                && Math.abs(alternateTarget - currentMotorRotations)
+                    < Math.abs(targetMotorRotations - currentMotorRotations)) {
+            targetMotorRotations = alternateTarget;
+        }
 
         turretMotor.setControl(positionControl.withPosition(targetMotorRotations));
     }
