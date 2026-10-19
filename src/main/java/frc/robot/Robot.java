@@ -24,17 +24,14 @@ import frc.robot.subsystems.Shooter;
  */
 public class Robot extends TimedRobot {
 
-  Shooter shooter;
-
-
-
-
   private final Field2d m_field = new Field2d();
 
 
   private Command m_autonomousCommand;
 
   RobotContainer m_RobotContainer;
+
+  Shooter shooter;
   
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,15 +40,12 @@ public class Robot extends TimedRobot {
   public Robot() {
     m_RobotContainer = new RobotContainer();
 
+    shooter = m_RobotContainer.getShooter();
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-    m_autonomousCommand = m_RobotContainer.getAutonomousCommand();
-
     SmartDashboard.putData("Field", m_field);
-
-
-    shooter = m_RobotContainer.getShooter();
 
   }
 
@@ -75,7 +69,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    
+
+
+
+  }
 
 
   @Override
@@ -87,9 +86,11 @@ public class Robot extends TimedRobot {
   @Override 
 
   public void autonomousInit() {
-    // schedule the autonomous command (example)
+
+    m_autonomousCommand = m_RobotContainer.getAutonomousCommand();
+
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
   }
 
@@ -107,6 +108,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+    shooter.resetShootState();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

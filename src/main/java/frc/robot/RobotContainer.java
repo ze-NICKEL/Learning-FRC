@@ -15,22 +15,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
 
   CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  CommandXboxController driverController = new CommandXboxController(0);
-
-
+  CommandXboxController driver = new CommandXboxController(0);
+  CommandXboxController operator = new CommandXboxController(1);
   //SUBSYSTEMS
   Intake intake = new Intake();
   Transfer transfer = new Transfer();
 
-  Shooter shooter = new Shooter(this.drivetrain);
+  Shooter shooter = new Shooter(drivetrain, transfer);
+
+  Turret turret = new Turret(this.drivetrain);
+  Hood hood = new Hood();
 
   private final SendableChooser<Command> autoChooser;
 
@@ -41,70 +45,54 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-
+    NamedCommands.registerCommand("intake", intake.fullIntake());
+    NamedCommands.registerCommand("setFlywheelInitial", shooter.setFlywheelInitial());
+    NamedCommands.registerCommand("stopShoot", transfer.stopAutoTransfer());
+    NamedCommands.registerCommand("stopIntake", intake.stopIntake());
+    NamedCommands.registerCommand("transfer", transfer.transferCommand());
     autoChooser = AutoBuilder.buildAutoChooser("BlueFirstAuto");
     SmartDashboard.putData("Auto Mode", autoChooser);
 
-    NamedCommands.registerCommand("intake", intake.fullIntake());
-    NamedCommands.registerCommand("shoot", shooter.autoShoot());
-    NamedCommands.registerCommand("stopShoot", shooter.stopShoot(transfer));
-    NamedCommands.registerCommand("stopIntake", intake.stopIntake());
-    NamedCommands.registerCommand("transfer", transfer.transfer());
-
-
     configureBindings();
 
-
-
-
   }
+
+  private void configureBindings() {
+    double[] driverInputs = new double[3];
+
+    CommandSwerveDrivetrain.joyStickPolar(driverInputs, driver);
+    
+    drivetrain.setDefaultCommand(
+      drivetrain.applyRequest(() -> {
+        CommandSwerveDrivetrain.joyStickPolar(driverInputs, driver);
+        return drive.withVelocityX(driverInputs[0])
+                    .withVelocityY(driverInputs[1])
+                    .withRotationalRate(driverInputs[2]);
+      })
+    );
+
+    driver.rightTrigger().whileTrue(intake.fullIntake())
+    .onFalse(intake.stopIntake());
+
+    driver.leftBumper().whileTrue(shooter.requestShoot()).onFalse(shooter.stopShootRequest());
+
+    operator.a().onTrue(shooter.allowShoot()).onFalse(shooter.disallowShoot());
+  
+  }
+
+    /// HELPER FUNCTIONS \\\
+    
 
   public Shooter getShooter() {
     return this.shooter;
   }
-    private void configureBindings() {
-      double[] driverInputs = new double[3];
-
-      CommandSwerveDrivetrain.joyStickPolar(driverInputs, driverController);
-      
-      
-      drivetrain.setDefaultCommand(
-
-          drivetrain.applyRequest(() -> {
-            CommandSwerveDrivetrain.joyStickPolar(driverInputs, driverController);
-            return drive.withVelocityX(driverInputs[0])
-                        .withVelocityY(driverInputs[1])
-                        .withRotationalRate(driverInputs[2]);
-          })
-      );
-      
-      /*  SOTM code
-      
-      drivetrain.setDefaultCommand(
-              LockHeading.driveWithGoalAim(
-                  drivetrain,
-                  -driverController.getRightY(),
-                  -driverController.getRightX(),
-                  TunerConstants.getTargetPosition()
-              )
-          );
-
-          */
-    }
-
-
-    /// HELPER FUNCTIONS \\\
     
-    public CommandSwerveDrivetrain getDrivetrain() {
-      return this.drivetrain;
-    }
-
-
-
-
+  public CommandSwerveDrivetrain getDrivetrain() {
+    return this.drivetrain;
+  }
 
   public Command getAutonomousCommand() {
-      /* Run the path selected from the auto chooser */
-      return autoChooser.getSelected();
+    /* Run the path selected from the auto chooser */
+    return autoChooser.getSelected();
   }
 }
