@@ -9,29 +9,43 @@ public class TurretConstants {
 
     public static int turretMotorID = 8;
 
+    static double turretMaxLimit = 220.0;
+    static double turretMinLimit = -220.0;
+    
+    
+        public static TalonFXConfiguration getTurretMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+    
+            Slot0Configs slot0 = config.Slot0;
+    
+            slot0.kP = 0;
+            slot0.kI = 0;
+            slot0.kD = 0;
+            slot0.kV = 0;
+            slot0.kA = 0;
+            slot0.kS = 0;
+    
+            config.CurrentLimits.SupplyCurrentLimit = 35.0;
+    
+            config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+    
+            config.Feedback.SensorToMechanismRatio = 43.5;
+            
+            config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    
+            config.ClosedLoopGeneral.ContinuousWrap = false;
 
-    public static TalonFXConfiguration getTurretMotorConfig() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
+            config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+            config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
 
-        Slot0Configs slot0 = config.Slot0;
+    
+    
+            config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = turretMaxLimit / 360.0;  // +90
 
-        slot0.kP = 0;
-        slot0.kI = 0;
-        slot0.kD = 0;
-        slot0.kV = 0;
-        slot0.kA = 0;
-        slot0.kS = 0;
-
-        config.CurrentLimits.SupplyCurrentLimit = 35.0;
-
-        config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
-
-        config.Feedback.SensorToMechanismRatio = 42.0 / 12.0;
-        
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = turretMinLimit / 360.0;  // - 90
 
         return config;
 

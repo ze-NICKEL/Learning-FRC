@@ -71,12 +71,15 @@ public class RobotContainer {
       })
     );
 
-    driver.rightTrigger().whileTrue(intake.fullIntake())
-    .onFalse(intake.stopIntake());
+    intake.setDefaultCommand(intake.stopIntake());
 
-    driver.leftBumper().whileTrue(shooter.requestShoot()).onFalse(shooter.stopShootRequest());
+    shooter.setDefaultCommand(shooter.stopShootRequest());
 
-    operator.a().onTrue(shooter.allowShoot()).onFalse(shooter.disallowShoot());
+    driver.rightTrigger().whileTrue(intake.fullIntake());
+
+    driver.leftBumper().whileTrue(shooter.requestShoot());
+
+    operator.a().onTrue(shooter.changeShootAllowance());
   
   }
 

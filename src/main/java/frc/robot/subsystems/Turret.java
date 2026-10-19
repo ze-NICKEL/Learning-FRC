@@ -19,8 +19,7 @@ public class Turret extends SubsystemBase {
 
     public Turret(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
-        this.targetPose = TunerConstants.getTargetPosition();
-        
+                
         // Apply configurations
         turretMotor.getConfigurator().apply(TurretConstants.getTurretMotorConfig());
         
@@ -30,6 +29,8 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        targetPose = TunerConstants.getTargetPosition();
         Pose2d robotPose = drivetrain.getState().Pose;
 
         double dx = targetPose.getX() - robotPose.getX();

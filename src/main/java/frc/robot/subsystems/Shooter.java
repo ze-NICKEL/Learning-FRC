@@ -123,15 +123,9 @@ public class Shooter extends SubsystemBase {
     }, this);
     }
 
-    public Command allowShoot() {
+    public Command changeShootAllowance() {
         return new InstantCommand(() -> {
-            shootAllowed = true;
-        });
-    }
-
-    public Command disallowShoot() {
-        return new InstantCommand(() -> {
-            shootAllowed = false;
+            shootAllowed = !shootAllowed;
         });
     }
 
