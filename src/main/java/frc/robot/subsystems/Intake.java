@@ -51,8 +51,8 @@ public class Intake extends SubsystemBase {
         return Commands.run(() -> {
             leftRetractMotor.setControl(retractRequest.withPosition(0));
             rightRetractMotor.setControl(retractRequest.withPosition(0));
-            leftIntakeMotor.set(0); 
-            rightIntakeMotor.set(0);
+            leftIntakeMotor.setControl(intakeVelRequest.withVelocity(0));
+            rightIntakeMotor.setControl(intakeVelRequest.withVelocity(0));
         }, this);
     }
 }

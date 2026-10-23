@@ -36,12 +36,12 @@ public class Transfer extends SubsystemBase {
     }
     public Command stopAutoTransfer() {
         return Commands.runOnce(() -> {
-            transferMotor.set(0);
+            transferMotor.setControl(transferRequest.withVelocity(0));
         }, this);
     }
 
     public void stopTransfer() {
-            transferMotor.set(0);
+            transferMotor.setControl(transferRequest.withVelocity(0));
     }
     
 }
