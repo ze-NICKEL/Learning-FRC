@@ -4,8 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Intake;
 
 public class RobotContainer {
+
+  //Controllers
+  CommandXboxController driver = new CommandXboxController(0);
+  CommandXboxController operator = new CommandXboxController(1);
+
+  Intake intake = new Intake();
 
 
   public RobotContainer() {
@@ -16,6 +24,20 @@ public class RobotContainer {
 
     private void configureBindings() {
 
+      driver.rightTrigger().whileTrue(intake.fullIntake());
+
+
+
+      
+
     }
+
+
+    //Getters
+    public Intake getIntake() {
+      return this.intake;
+    }
+
+    
 
 }
