@@ -7,30 +7,28 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class TransferShootConstants {
 
-    public static final int transferMotorID = 3;
+    public static final int transferMotorID = 16;
     
     public static final double transferSpeedRPS = 5;
 
-    public static final int leftShooterMotorID = 6;
-    public static final int rightShooterMotorID = 7;
+    public static final int leftShooterMotorID = 19;
+    public static final int rightShooterMotorID = 20;
 
 
     public static TalonFXConfiguration getTransferMotorConfig() {
         TalonFXConfiguration config = new TalonFXConfiguration();
         Slot0Configs slot0 = config.Slot0;
 
-        slot0.kP = 0.0;
+        slot0.kP = 30.0;
         slot0.kI = 0.0;
-        slot0.kD = 0.0;
-        slot0.kS = 0.0;
-        slot0.kV = 0.0;
+        slot0.kD = 0.2;
+        slot0.kS = 5.8;
+        slot0.kV = 0.148275;
         slot0.kA = 0.0;
-
-        config.CurrentLimits.SupplyCurrentLimit = 10.0;
-
-        config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
-
-        config.Feedback.SensorToMechanismRatio = 1.0;
+        config.CurrentLimits.SupplyCurrentLimit = 30.0;
+        config.TorqueCurrent.PeakReverseTorqueCurrent = -800.0;
+        config.Feedback.SensorToMechanismRatio = (40.0/18.0) * (5) * (5);
+        
 
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -42,21 +40,21 @@ public class TransferShootConstants {
         TalonFXConfiguration config = new TalonFXConfiguration();
         Slot0Configs slot0 = config.Slot0;
 
-        slot0.kP = 0.0;
+        slot0.kP = 10.0;
         slot0.kI = 0.0;
         slot0.kD = 0.0;
-        slot0.kS = 0.0;
-        slot0.kV = 0.0;
-        slot0.kA = 0.0;
+        slot0.kS = 10.0;
+        slot0.kV = 0.099;
+        slot0.kA = 0.1;
 
-        config.CurrentLimits.SupplyCurrentLimit = 0.0;
+        config.CurrentLimits.SupplyCurrentLimit = 40.0;
 
         config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
 
-        config.Feedback.SensorToMechanismRatio = 42.0 / 12.0;
+        config.Feedback.SensorToMechanismRatio = 1.0;
         
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        //config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         config.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
         return config;

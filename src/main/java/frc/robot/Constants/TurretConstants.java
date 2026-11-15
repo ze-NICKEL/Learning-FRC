@@ -7,10 +7,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class TurretConstants {
 
-    public static int turretMotorID = 8;
+    public static int turretMotorID = 17;
 
-    public static double turretMaxLimit = 220.0;
-    public static double turretMinLimit = -220.0;
+    public static double turretMaxLimit =  200.0;
+    public static double turretMinLimit = -200.0;
     
     
         public static TalonFXConfiguration getTurretMotorConfig() {
