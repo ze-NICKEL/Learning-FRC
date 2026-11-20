@@ -1,6 +1,7 @@
 package frc.robot.constants;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -14,8 +15,8 @@ public class IntakeConstants {
 
     public static double intakeVelocityRPS = 20;
     
-    public static int leftRetractID = 14;
-    public static int rightRetractID = 5;
+    public static int leftRetractID = 40;
+    public static int rightRetractID = 40;
 
 
     public static double retractDistance = -0.15;
@@ -32,7 +33,7 @@ public class IntakeConstants {
         slot0.kV = 10.0;
         slot0.kA = 0.0;
 
-        config.CurrentLimits.SupplyCurrentLimit = 50.0;
+        //config.CurrentLimits.SupplyCurrentLimit = 50.0;
 
         config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
 
@@ -58,8 +59,12 @@ public class IntakeConstants {
         slot0.kV = 0.0;
         slot0.kA = 0.0;
 
+        slot0.GravityType = GravityTypeValue.Arm_Cosine;
+
         config.CurrentLimits.SupplyCurrentLimit = 45.0;
         config.MotionMagic.MotionMagicCruiseVelocity = 3.0;
+
+        config.MotionMagic.MotionMagicAcceleration = 9.0;
 
 
         config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;

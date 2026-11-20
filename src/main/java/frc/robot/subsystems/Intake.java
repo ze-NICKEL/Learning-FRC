@@ -25,8 +25,8 @@ public class Intake extends SubsystemBase {
     MotionMagicVoltage retractRequest = new MotionMagicVoltage(0.0);
     public Intake() {
 
-        leftIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(false));
-        rightIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(true));
+        leftIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(true));
+        rightIntakeMotor.getConfigurator().apply(IntakeConstants.getIntakeMotorConfig(false));
 
         leftRetractMotor.getConfigurator().apply(IntakeConstants.getRetractMotorConfiguration(false));
         rightRetractMotor.getConfigurator().apply(IntakeConstants.getRetractMotorConfiguration(true));
